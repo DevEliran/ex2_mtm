@@ -75,6 +75,7 @@ def isValidData(id, age, grades):
 # ~~~~~~~~~~~~~~~~~~ Part1 DONE ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~ Part2 ~~~~~~~~~~~~~~~~~~~~~
 
+
 #Returns a new Survey item with the data of a new survey file:
 #survey_path: The path to the survey
 def scan_survey(survey_path):
@@ -99,6 +100,7 @@ def scan_survey(survey_path):
             Survey.SurveyAddPerson(new_survey, int(data[0]), int(data[2]), gender, habits, grades_int)
     return new_survey
 
+
 #Prints a python list containing the number of votes for each rating of a group according to the arguments
 #s: the data of the Survey object
 #choc_type: the number of the chocolate (between 0 and 4)
@@ -119,9 +121,11 @@ def print_info(s, choc_type, gender, min_age, max_age, eating_habits):
         habits = Survey.SURVEY_OMNIVORE
     result = Survey.SurveyQuerySurvey(s, choc_type, gender_bool, min_age, max_age, habits)
     result_array=[]
-    for idx,score in enumerate(result):
-        result_array.append(Survey.SurveyGetIntArIdxVal(result, idx))
+    for i in range(10):
+        result_array.append(Survey.SurveyGetIntArIdxVal(result, i))
     print(result_array)
+    Survey.SurveyDestoryIntAr(result)
+
 
 #Clears a Survey object data
 #s: the data of the Survey object
