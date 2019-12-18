@@ -24,20 +24,19 @@ def assertInvalidData(file_path):
     invalid_data = []
     with open(file_path,'r') as file:
         for index, line in enumerate(file):
-            data = line.split(' ')
+            data = list(filter(lambda x: x != '', line.split(' ')))
             grades = data[4:]
-            if isValidData(data[0], data[2], grades) != 'GOODATA':
+            if not isValidData(data[0], data[2], grades):
                 invalid_data.append(index)
     file.close()
     return invalid_data
 
 
-def removeInvalidData(file_path , list_of_invalid_lines):
+def removeInvalidData(file_path, list_of_invalid_lines):
     with open(file_path+"mid_fix", 'a+') as mid_fixed_file, open(file_path, 'r') as file:
         for index, line in enumerate(file):
-            for invalid_data in list_of_invalid_lines:
-                if index != invalid_data:
-                    mid_fixed_file.write(line)
+            if index not in list_of_invalid_lines:
+                mid_fixed_file.write(line)
     mid_fixed_file.close()
     file.close()
     return file_path+"mid_fix"
@@ -62,16 +61,14 @@ def countIdShow(file_path):
 
 def isValidData(id, age, grades):
    if len(id) != 8:
-       return id
+       return False
    if int(age) < 10 or int(age) > 100:
-       return id
-   for grade in grades:
-       try:
-            if int(grade) < 0 or int(grade) > 10:
-                return id
-       except ValueError:
-            continue
-   return 'GOODATA'
+       return False
+   for i in grades:
+        if int(i) < 0 or int(i) > 10:
+            return False
+   return True
+
 # ~~~~~~~~~~~~~~~~~~ Part1 DONE ~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~ Part2 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -98,6 +95,7 @@ def scan_survey(survey_path):
             else:
                 habits = Survey.SURVEY_OMNIVORE
             Survey.SurveyAddPerson(new_survey, int(data[0]), int(data[2]), gender, habits, grades_int)
+            Survey.SurveyDestoryIntAr(grades_int)
     return new_survey
 
 
