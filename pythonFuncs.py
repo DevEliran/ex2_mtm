@@ -1,5 +1,6 @@
 from itertools import chain
 import Survey
+import os
 #Filters a survey and prints to screen the corrected answers:
 #old_survey_path: The path to the unfiltered survey
 def correct_myfile(old_survey_path):
@@ -10,7 +11,8 @@ def correct_myfile(old_survey_path):
     for index, i in enumerate(lines_to_copy):
         if index % 2 == 0:
             index_of_lines_to_copy.append(i)
-    with open("corrected_"+old_survey_path, "a+") as new_file, open(mid_fixed, "r") as old_file:
+    with open("corrected_"+old_survey_path, "a+") as new_file, \
+            open(mid_fixed, "r") as old_file:
         lines = old_file.readlines()
         for k in index_of_lines_to_copy:
             new_file.write(lines[k])
@@ -18,6 +20,7 @@ def correct_myfile(old_survey_path):
         content = final_file.read()
     print(content.rstrip('\n'))
     new_file.close()
+    os.remove(old_survey_path+"mid_fix")
 
 
 def assertInvalidData(file_path):
@@ -33,7 +36,8 @@ def assertInvalidData(file_path):
 
 
 def removeInvalidData(file_path, list_of_invalid_lines):
-    with open(file_path+"mid_fix", 'a+') as mid_fixed_file, open(file_path, 'r') as file:
+    with open(file_path+"mid_fix", 'a+') as mid_fixed_file,\
+            open(file_path, 'r') as file:
         for index, line in enumerate(file):
             if index not in list_of_invalid_lines:
                 mid_fixed_file.write(line)
@@ -55,7 +59,8 @@ def countIdShow(file_path):
                 lines_to_copy[idx-1] = index
 
     file.close()
-    final_list=[*chain(*sorted(zip(lines_to_copy[::2], lines_to_copy[1::2]), key=lambda k:k[1]))]
+    final_list = [*chain(*sorted(zip(lines_to_copy[::2], lines_to_copy[1::2]),
+                                 key=lambda k:k[1]))]
     return final_list
 
 
@@ -90,22 +95,25 @@ def scan_survey(survey_path):
                 gender = False
             if data[1] == 'Vegan':
                 habits = Survey.SURVEY_VEGAN
-            elif data[1] == 'Vegaterian':
+            elif data[1] == 'Vegetarian':
                 habits = Survey.SURVEY_VEGATERIAN
             else:
                 habits = Survey.SURVEY_OMNIVORE
-            Survey.SurveyAddPerson(new_survey, int(data[0]), int(data[2]), gender, habits, grades_int)
+            Survey.SurveyAddPerson(new_survey, int(data[0]), int(data[2]),
+                                   gender, habits, grades_int)
             Survey.SurveyDestoryIntAr(grades_int)
     return new_survey
 
 
-#Prints a python list containing the number of votes for each rating of a group according to the arguments
+#Prints a python list containing the number of votes for each rating of
+# a group according to the arguments
 #s: the data of the Survey object
 #choc_type: the number of the chocolate (between 0 and 4)
 #gender: the gender of the group (string of "Man" or "Woman"
 #min_age: the minimum age of the group (a number)
 #max_age: the maximum age of the group (a number)
-#eating_habits: the eating habits of the group (string of "Omnivore", "Vegan" or "Vegetarian")
+#eating_habits: the eating habits of the group (string of "Omnivore",
+# "Vegan" or "Vegetarian")
 def print_info(s, choc_type, gender, min_age, max_age, eating_habits):
     if gender == 'Man':
         gender_bool = True
@@ -113,11 +121,12 @@ def print_info(s, choc_type, gender, min_age, max_age, eating_habits):
         gender_bool = False
     if eating_habits == 'Vegan':
         habits = Survey.SURVEY_VEGAN
-    elif eating_habits == 'Vegeterian':
+    elif eating_habits == 'Vegetarian':
         habits = Survey.SURVEY_VEGATERIAN
     else:
         habits = Survey.SURVEY_OMNIVORE
-    result = Survey.SurveyQuerySurvey(s, choc_type, gender_bool, min_age, max_age, habits)
+    result = Survey.SurveyQuerySurvey(s, choc_type, gender_bool, min_age,
+                                      max_age, habits)
     result_array=[]
     for i in range(10):
         result_array.append(Survey.SurveyGetIntArIdxVal(result, i))
