@@ -1,6 +1,12 @@
 from itertools import chain
 import Survey
 import os
+ID_VALID_LEN = 8
+MIN_AGE = 10
+MAX_AGE = 100
+MIN_SCORE = 1
+MAX_SCORE = 10
+NUM_OF_RATINGS = 10
 #Filters a survey and prints to screen the corrected answers:
 #old_survey_path: The path to the unfiltered survey
 def correct_myfile(old_survey_path):
@@ -65,12 +71,12 @@ def countIdShow(file_path):
 
 
 def isValidData(id, age, grades):
-   if len(id) != 8:
+   if len(id) != ID_VALID_LEN:
        return False
-   if int(age) < 10 or int(age) > 100:
+   if int(age) < MIN_AGE or int(age) > MAX_AGE:
        return False
    for i in grades:
-        if int(i) < 0 or int(i) > 10:
+        if int(i) < MIN_SCORE or int(i) > MAX_SCORE:
             return False
    return True
 
@@ -128,7 +134,7 @@ def print_info(s, choc_type, gender, min_age, max_age, eating_habits):
     result = Survey.SurveyQuerySurvey(s, choc_type, gender_bool, min_age,
                                       max_age, habits)
     result_array=[]
-    for i in range(10):
+    for i in range(NUM_OF_RATINGS):
         result_array.append(Survey.SurveyGetIntArIdxVal(result, i))
     print(result_array)
     Survey.SurveyDestoryIntAr(result)
