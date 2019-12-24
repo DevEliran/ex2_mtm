@@ -1,17 +1,18 @@
-from itertools import chain
 import Survey
-import os
+
 ID_VALID_LEN = 8
 MIN_AGE = 10
 MAX_AGE = 100
 MIN_SCORE = 1
 MAX_SCORE = 10
 NUM_OF_RATINGS = 10
+
+
 #Filters a survey and prints to screen the corrected answers:
 #old_survey_path: The path to the unfiltered survey
 def correct_myfile(old_survey_path):
     lines_to_copy = get_correct_lines(old_survey_path)
-    with open("corrected_"+old_survey_path, "w") as new_file, open(old_survey_path,'r') as old_file:
+    with open("corrected_"+old_survey_path, "w") as new_file, open(old_survey_path, 'r') as old_file:
         old_file_lines = old_file.readlines()
         for k in lines_to_copy:
             index = k[1]
@@ -31,7 +32,7 @@ def get_correct_lines(file_path):
                 lines_to_copy[data[0]] = index
 
     file.close()
-    final_list = sorted(lines_to_copy.items(), key=lambda k:k[0])
+    final_list = sorted(lines_to_copy.items(), key=lambda k: k[0])
     return final_list
 
 
